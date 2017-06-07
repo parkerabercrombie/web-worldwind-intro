@@ -61,11 +61,33 @@
     }
 
     function onSaveBookmark() {
-        // TODO: Save current map view to bookmarks list
+        var bookmarkName =  $("#newBookmarkName")[0].value;
+
+        var lat = app.wwd.navigator.lookAtLocation.latitude;
+        var lon = app.wwd.navigator.lookAtLocation.longitude;
+        var range = app.wwd.navigator.range;
+
+        var bookmarkId = app.bookmarks.length;
+
+        app.bookmarks.push({
+            name: bookmarkName,
+            position: {
+                latitude: lat,
+                longitude: lon,
+                altitude: range
+           }
+        });
+
+        var nDecimals = 2;
+        var newBookmarkTitle = $('<div class="bookmark-title"><a onclick="gotoBookmark(' + bookmarkId + ')">' + bookmarkName + '</a></div>');
+        var newBookmarkDetail = $('<div>Lat: ' + lat.toFixed(nDecimals) + ', Lon: ' + lon.toFixed(nDecimals) + '</div>');
+
+        $("#bookmarkList").append(newBookmarkTitle).append(newBookmarkDetail);
     }
 
     function gotoBookmark(bookmarkId, callback) {
-        // TODO: animate globe to selected bookmark (hint: look at World Wind GoToAnimator)
+        var bookmark = app.bookmarks[bookmarkId];
+        app.animator.goTo(bookmark.position);
     }
 </script>
 
